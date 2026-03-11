@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-a
+  namespace: red
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: app-a
+  template:
+    metadata:
+      labels:
+        app: app-a
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |
+          [{
+            "name": "attachnet",
+            "namespace": "red",
+            "interface": "net1",
+            "ips": ["172.30.0.2"]
+          }]
+    spec:
+      containers:
+        - name: netshoot
+          image: nicolaka/netshoot
+          command: ["sleep", "infinity"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-b
+  namespace: red
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: app-b
+  template:
+    metadata:
+      labels:
+        app: app-b
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |
+          [{
+            "name": "attachnet",
+            "namespace": "red",
+            "interface": "net1",
+            "ips": ["172.30.0.3"]
+          }]
+    spec:
+      containers:
+        - name: netshoot
+          image: nicolaka/netshoot
+          command: ["sleep", "infinity"]
