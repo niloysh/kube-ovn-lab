@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-a
-  namespace: blue
+  namespace: __TENANT__
 spec:
   replicas: 1
   strategy:
@@ -18,7 +18,7 @@ spec:
         k8s.v1.cni.cncf.io/networks: |
           [{
             "name": "attachnet",
-            "namespace": "blue",
+            "namespace": "__TENANT__",
             "interface": "net1",
             "ips": ["172.30.0.2"]
           }]
@@ -32,7 +32,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-b
-  namespace: blue
+  namespace: __TENANT__
 spec:
   replicas: 1
   strategy:
@@ -48,7 +48,7 @@ spec:
         k8s.v1.cni.cncf.io/networks: |
           [{
             "name": "attachnet",
-            "namespace": "blue",
+            "namespace": "__TENANT__",
             "interface": "net1",
             "ips": ["172.30.0.3"]
           }]
