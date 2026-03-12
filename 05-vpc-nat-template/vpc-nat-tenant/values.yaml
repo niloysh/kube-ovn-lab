@@ -14,10 +14,19 @@ gateway: 172.30.0.1
 # Fixed IP for the NAT gateway's internal interface — excluded from subnet
 lanIp: 172.30.0.254
 
-# Fixed IPs for app pods — app-a is also the FIP target
-podIpA: 172.30.0.2
-podIpB: 172.30.0.3
-
 # Node to schedule the NAT gateway on
 nodeSelector:
   hostname: rke2-02
+
+# Pod instances — each gets a fixed IP and optional FIP
+# type: "app-a" or "app-b" — chart determines behavior per type
+# enableFip: whether to create an EIP/FIP rule for this pod
+pods:
+  - name: app-a-1
+    type: app-a
+    ip: 172.30.0.2
+    enableFip: true
+  - name: app-b-1
+    type: app-b
+    ip: 172.30.0.3
+    enableFip: false
