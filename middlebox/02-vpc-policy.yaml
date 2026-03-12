@@ -1,0 +1,16 @@
+apiVersion: kubeovn.io/v1
+kind: Vpc
+metadata:
+  name: red-vpc
+spec:
+  policyRoutes:
+    # pod-a → pod-b: redirect to middlebox net1 interface
+    - priority: 32000
+      action: reroute
+      match: "ip4.src == 172.30.1.2 && ip4.dst == 172.30.2.2"
+      nextHopIP: 172.30.1.3
+    # pod-b → pod-a: redirect to middlebox net2 interface
+    - priority: 32000
+      action: reroute
+      match: "ip4.src == 172.30.2.2 && ip4.dst == 172.30.1.2"
+      nextHopIP: 172.30.2.3
