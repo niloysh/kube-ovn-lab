@@ -1,0 +1,44 @@
+# # Primary pod subnet for eth0 inside red namespace.
+# # This is REQUIRED so Kube-OVN can allocate the main pod address (provider=ovn).
+# apiVersion: kubeovn.io/v1
+# kind: Subnet
+# metadata:
+#   name: red-default
+# spec:
+#   vpc: red-vpc
+#   protocol: IPv4
+#   provider: ovn
+#   cidrBlock: 172.31.0.0/24
+#   gateway: 172.31.0.1
+#   namespaces:
+#     - red
+#   excludeIps:
+#     - 172.31.0.1
+# ---
+# Secondary subnet used by the NAT GW and the pod's extra interface.
+apiVersion: kubeovn.io/v1
+kind: Subnet
+metadata:
+  name: attachnet-red
+spec:
+  vpc: red-vpc
+  protocol: IPv4
+  provider: attachnet.red.ovn
+  cidrBlock: 172.30.0.0/24
+  gateway: 172.30.0.1
+  excludeIps:
+    - 172.30.0.1
+    - 172.30.0.254
+---
+apiVersion: kubeovn.io/v1
+kind: Subnet
+metadata:
+  name: ovn-vpc-external-network
+spec:
+  protocol: IPv4
+  provider: ovn-vpc-external-network.kube-system
+  cidrBlock: 10.10.10.0/24
+  gateway: 10.10.10.1  # IP address of the physical gateway
+  excludeIps:
+    - 10.10.10.1..10.10.10.80
+    - 10.10.10.83..10.10.10.254

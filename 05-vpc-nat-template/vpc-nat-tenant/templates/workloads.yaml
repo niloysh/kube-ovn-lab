@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-a
+  namespace: {{ .Values.tenant }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: app-a
+  template:
+    metadata:
+      labels:
+        app: app-a
+      annotations:
+        k8s.v1.cni.cncf.io/networks: {{ .Values.tenant }}/attachnet
+        attachnet.{{ .Values.tenant }}.ovn.kubernetes.io/ip_address: {{ .Values.podIpA }}
+    spec:
+      {{- if .Values.expose }}
+      initContainers:
+        - name: setup-routing
+          image: nicolaka/netshoot
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          command:
+            - sh
+            - -c
+            - |
+              set -eux
+              ip rule add from {{ .Values.podIpA }}/32 table 100
+              ip route add {{ .Values.cidr }} dev net1 scope link table 100
+              ip route add default via {{ .Values.lanIp }} dev net1 table 100
+      {{- end }}
+      containers:
+        - name: netshoot
+          image: nicolaka/netshoot
+          command: ["sleep", "infinity"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-b
+  namespace: {{ .Values.tenant }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: app-b
+  template:
+    metadata:
+      labels:
+        app: app-b
+      annotations:
+        k8s.v1.cni.cncf.io/networks: {{ .Values.tenant }}/attachnet
+        attachnet.{{ .Values.tenant }}.ovn.kubernetes.io/ip_address: {{ .Values.podIpB }}
+    spec:
+      containers:
+        - name: netshoot
+          image: nicolaka/netshoot
+          command: ["sleep", "infinity"]

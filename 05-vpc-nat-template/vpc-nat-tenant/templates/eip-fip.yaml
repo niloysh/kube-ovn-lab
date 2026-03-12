@@ -1,0 +1,17 @@
+{{- if .Values.expose }}
+apiVersion: kubeovn.io/v1
+kind: IptablesEIP
+metadata:
+  name: {{ .Values.tenant }}-eip
+spec:
+  natGwDp: {{ .Values.tenant }}-gw
+  externalSubnet: {{ .Values.externalSubnet }}
+---
+apiVersion: kubeovn.io/v1
+kind: IptablesFIPRule
+metadata:
+  name: {{ .Values.tenant }}-fip
+spec:
+  eip: {{ .Values.tenant }}-eip
+  internalIp: {{ .Values.podIpA }}
+{{- end }}

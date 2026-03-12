@@ -1,0 +1,5 @@
+apiVersion: v2
+name: vpc-nat-tenant
+description: Deploys a Kube-OVN VPC tenant with optional NAT gateway and EIP/FIP exposure
+type: application
+version: 0.1.0

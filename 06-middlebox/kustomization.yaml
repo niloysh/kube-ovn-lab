@@ -1,0 +1,10 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespaces.yaml
+  - vpcs.yaml        # empty spec, no policy routes yet
+  - subnets.yaml
+  - nads.yaml
+  - deploys.yaml     # app-a and app-b only

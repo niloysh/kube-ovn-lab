@@ -1,0 +1,10 @@
+tenant: red
+
+cidr: 172.30.0.0/24
+gateway: 172.30.0.1
+lanIp: 172.30.0.254
+podIpA: 172.30.0.2
+podIpB: 172.30.0.3
+
+nodeSelector:
+  hostname: rke2-02

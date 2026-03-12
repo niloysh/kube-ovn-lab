@@ -1,0 +1,13 @@
+apiVersion: kubeovn.io/v1
+kind: VpcNatGateway
+metadata:
+  name: {{ .Values.tenant }}-gw
+spec:
+  vpc: {{ .Values.tenant }}-vpc
+  subnet: attachnet-{{ .Values.tenant }}
+  lanIp: {{ .Values.lanIp }}
+  selector:
+    - "kubernetes.io/hostname: {{ .Values.nodeSelector.hostname }}"
+    - "kubernetes.io/os: linux"
+  externalSubnets:
+    - {{ .Values.externalSubnet }}

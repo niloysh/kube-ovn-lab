@@ -1,0 +1,11 @@
+tenant: blue
+
+cidr: 172.30.1.0/24
+gateway: 172.30.1.1
+lanIp: 172.30.1.254
+podIpA: 172.30.1.2
+podIpB: 172.30.1.3
+expose: true
+
+nodeSelector:
+  hostname: rke2-03

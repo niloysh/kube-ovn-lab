@@ -1,0 +1,13 @@
+apiVersion: kubeovn.io/v1
+kind: Subnet
+metadata:
+  name: attachnet-{{ .Values.tenant }}
+spec:
+  vpc: {{ .Values.tenant }}-vpc
+  protocol: IPv4
+  provider: attachnet.{{ .Values.tenant }}.ovn
+  cidrBlock: {{ .Values.cidr }}
+  gateway: {{ .Values.gateway }}
+  excludeIps:
+    - {{ .Values.gateway }}
+    - {{ .Values.lanIp }}

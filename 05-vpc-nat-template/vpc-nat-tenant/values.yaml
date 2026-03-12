@@ -1,0 +1,23 @@
+# Required — override in tenant values file
+tenant: ""
+
+# Set to true after the NAT gateway pod is Running to create EIP/FIP
+expose: false
+
+# External subnet name (kubectl apply -f shared/external-network.yaml)
+externalSubnet: ovn-vpc-external-network
+
+# Internal (LAN) subnet for the VPC
+cidr: 172.30.0.0/24
+gateway: 172.30.0.1
+
+# Fixed IP for the NAT gateway's internal interface — excluded from subnet
+lanIp: 172.30.0.254
+
+# Fixed IPs for app pods — app-a is also the FIP target
+podIpA: 172.30.0.2
+podIpB: 172.30.0.3
+
+# Node to schedule the NAT gateway on
+nodeSelector:
+  hostname: rke2-02
